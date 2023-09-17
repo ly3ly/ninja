@@ -28,8 +28,11 @@ In summary, contract testing is essential for managing dependencies, detecting i
 ## What capabilities this tool provide?
 The focus of this tool is to automatically generate contract test cases. After the developer/tester inputs the parameters and restrictions of the interface into this tool, this tool will generate **boundaries, exceptions, and normal cases** for the interface, and combine it with [Microsoft pict tool]((https://github.com/microsoft/pict)) to generate an appropriate amount of contract test cases. This avoids excessive output due to exhaustive methods.
 
-## Usage
-
+## Usage (Containerized deployment to be completed)
+```
+> run frontend: cd web/react-mui see readme
+> run backend: cd server && npm i && npm run start
+```
 
 
 ## Architecture
