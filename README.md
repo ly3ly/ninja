@@ -1,8 +1,9 @@
-# Ninja - fasten your iteration boost
+# <img src="./imgs/logo.svg" width=30 height=30/> Ninja - fasten your iteration boost
+
 (To be improved) An auxiliary tool that can automatically generate interface `contract test cases`, reducing the amount of coding for developers, improving code quality, and helping to accelerate product iterations
 
 ## What is contract testing?
-![contract testing](./readme-imgs/image.png)
+![contract testing](./imgs/image.png)
 
 Contract testing is a technique for testing an integration point by checking each application in isolation to ensure the messages it sends or receives conform to a shared understanding that is documented in a "contract".
 
