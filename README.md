@@ -2,6 +2,10 @@
 
 (To be improved) An auxiliary tool that can automatically generate interface `contract test cases`, reducing the amount of coding for developers, improving code quality, and helping to accelerate product iterations
 
+
+## Scrum management
+https://www.notion.so/efef23efd242410eb82321be0e9d59b0?v=26eeac409ac7444c8f216fa3846c7545&pvs=4
+
 ## What is contract testing?
 ![contract testing](./imgs/image.png)
 
