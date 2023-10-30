@@ -19,24 +19,24 @@ The focus of this tool is to automatically generate test cases. After the develo
 ## Usage (Containerized deployment to be completed)
 ### run frontend
 ```
-cd web
+cd ninja-web
 npm i
 npm run dev
 ```
 ### run backend
 ```
-cd server
-pip install -r requirements.txt
-python app.py
+cd ninjia-server
+npm i
+npm run start
 ```
 
 
 ## Architecture
-Frontend: React.js + MUI
+Frontend: React.js + Antd
 
-Backend: Python + flask
+Backend: Express.js
 
-Other Tools: docker, （database）, PICT
+Other Tools: docker, PICT
 
 
 

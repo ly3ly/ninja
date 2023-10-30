@@ -1,3 +1,0 @@
-Flask==1.0.3
-pydantic
-flask_cors
