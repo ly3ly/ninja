@@ -4,11 +4,13 @@
 import { useState, useEffect } from "react";
 import {
     Card, Button, Form, Input, Table, Space, Modal, Tag, Popconfirm, Select, Checkbox,
-    Popover, InputNumber, Row, Col, message
+    Popover, InputNumber, Row, Col, message, Typography
 } from "antd";
-import { PlusOutlined, CloseOutlined, MinusCircleOutlined } from "@ant-design/icons";
+const { Title, Paragraph, Text, Link } = Typography;
+import { PlusOutlined, CloseOutlined, MinusCircleOutlined, FileAddOutlined, FormOutlined } from "@ant-design/icons";
 import { DeleteApi, GetApiList, PostNewApi, UpdateApi } from "../services/interface";
 const { Option } = Select;
+import { saveAs } from 'file-saver';
 var dataSource = [
     {
         "key": '1',
@@ -82,6 +84,8 @@ var apiBodyDefaultVal = `[
 
 import { serverUrl } from "../services/tools";
 import GenTestcase from "../components/progress/GenTestcase";
+import TextArea from "antd/lib/input/TextArea";
+import { convertJsonToYaml, convertYamlToJson, isValidJsonOrYaml } from "../../utils/json2yaml";
 
 const ApiPage = () => {
     const [loading, setLoading] = useState(false);
@@ -172,13 +176,131 @@ const ApiPage = () => {
                         <a>Delete</a>
                     </Popconfirm>
 
+                    <Popover
+                        content={<><a
+                            onClick={() => {
+                                const fileName = `${record.api_name}.json`;
+                                let filedata = record
+                                const blob = new Blob([JSON.stringify(filedata)], { type: 'text/plain;charset=utf-8' });
+                                saveAs(blob, fileName);
+                                // console.log("json")
+                            }}>JSON</a> <a
+                                onClick={() => {
+                                    console.log("yaml")
+                                    const fileName = `${record.api_name}.yaml`;
+                                    let filedata = convertJsonToYaml(record)
+                                    const blob = new Blob([filedata], { type: 'text/plain;charset=utf-8' });
+                                    saveAs(blob, fileName);
+                                }}
+                            >YAML</a></>}
+                        title="Select Format"
+                        trigger="click"
+                    >
+                        <a>Download</a>
+                    </Popover >
+
 
 
                 </Space >
             ),
         }
     ]
+    const [showImportFromJSONYAML, setShowImportFromJSONYAML] = useState(false)
+    const ImportFromJSONYAML = () => {
+        const [verifyResult, setVerifyResult] = useState("Wait to verify")
+        const [reqData, setReqData] = useState({})
+        return (
+            <Modal
+                open={showImportFromJSONYAML}
+                onCancel={() => setShowImportFromJSONYAML(false)}
+                title="Import From JSON/YAML"
+                onOk={() => {
+                    PostNewApi(reqData).then(res => {
+                        console.log(res)
+                        if (res.code == 0) {
+                            GetApiList({ start_index: 0, page_size: 1000 }).then(res => {
+                                console.log(res)
+                                if (res.code === 0) {
+                                    setOpen(false);
+                                    message.success('create successfully!');
+                                    setTableData(res.data)
+                                } else {
+                                    message.error(res.data);
+                                }
+                            })
+                        } else {
+                            message.error(res.data);
+                        }
 
+                    }).catch(err => {
+                        console.log(err)
+                    }).finally(() => {
+                        setLoading(false);
+                        // setShowImportFromJSONYAML(false)
+                        // setModalForm();
+                    })
+                }}
+            >
+                <TextArea placeholder="Paste your context here"
+                    onChange={(val) => {
+                        let res = isValidJsonOrYaml(val.target.value);
+                        if (!res) {
+                            setVerifyResult("Invalid JSON/YAML")
+                        } else {
+                            let data = val.target.value
+                            setVerifyResult(`context type: ${res}`)
+                            if (res == 'yaml') {
+                                data = convertYamlToJson(res)
+                            }
+                            setReqData(data);
+                        }
+                        // console.log(res)
+                    }}
+                    style={{ marginBottom: '10px' }}
+                    autoSize={{
+                        minRows: 10,
+                        maxRows: 20,
+                    }}></TextArea>
+                <Text keyboard >{verifyResult}</Text>
+
+            </Modal>
+        )
+    }
+    const [showMyInsertOpts, setShowMyInsertOpts] = useState(false)
+    const MyInsertOpts = () => {
+
+        return (
+            <Modal
+                onCancel={() => { setShowMyInsertOpts(false) }}
+                title="Insert Options"
+                open={showMyInsertOpts}
+                footer={null}>
+                <Button
+                    type="dashed"
+                    onClick={() => {
+                        setShowMyInsertOpts(false)
+                        setShowImportFromJSONYAML(true)
+                    }}
+                >
+                    <FileAddOutlined />
+                    Import from JSON/YAML
+                </Button>
+                <Button
+                    type="dashed"
+                    style={{ marginLeft: '10px' }}
+                    onClick={() => {
+                        setShowMyInsertOpts(false)
+                        setOpen(true)
+                        setModalTitle('New API')
+                        setModalForm()
+                    }}
+                >
+                    <FormOutlined />
+                    Manually import
+                </Button>
+            </Modal>
+        )
+    }
     const MyModal = () => {
         // console.log('modal props:', modalForm)
 
@@ -503,6 +625,8 @@ const ApiPage = () => {
                 setShowGenTestcase(false)
                 setTestAPI({})
             }} />
+            <ImportFromJSONYAML />
+            <MyInsertOpts />
 
             <MyModal />
 
@@ -511,9 +635,10 @@ const ApiPage = () => {
                 extra={
                     <Button type="primary" icon={<PlusOutlined />}
                         onClick={() => {
-                            setOpen(true)
-                            setModalTitle('New API')
-                            setModalForm()
+                            setShowMyInsertOpts(true)
+                            // setOpen(true)
+                            // setModalTitle('New API')
+                            // setModalForm()
                         }}>
                         New API
                     </Button>
