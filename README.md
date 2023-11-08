@@ -25,9 +25,9 @@ npm run dev
 ```
 ### run backend
 ```
-cd ninjia-server
+cd ninja-server
 npm i
-npm run start
+npm run dev
 ```
 
 
