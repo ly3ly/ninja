@@ -22,3 +22,4 @@ describe('runCmd', () => {
         await expect(runCmd('ls', ['-lh'])).resolves.toBe('output');
     });
 });
+
