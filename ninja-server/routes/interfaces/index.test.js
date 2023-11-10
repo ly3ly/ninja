@@ -62,4 +62,11 @@ describe('Interface Router', () => {
         expect(response.statusCode).toBe(200);
         // 更多断言
     });
+
+    // 重复测试  lajiao
+    it('should run testcases', async () => {
+        const response = await request(app).get('/interface/run/:id'); // 替换:id为有效值
+        expect(response.statusCode).toBe(200);
+        // 更多断言
+    });
 });
