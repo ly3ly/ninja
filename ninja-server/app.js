@@ -1,6 +1,5 @@
 const express = require("express");
 const app = express();
-const port = 3000;
 const { expressjwt } = require("express-jwt");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
@@ -10,9 +9,10 @@ const interfaceRouter = require("./routes/interfaces");
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 // 设置 CORS 头部
 app.use((req, res, next) => {
-  const referral = req.headers["referer"];
+  const referral = req.headers["referer"] || "";
   const origin = referral.match(/^https?:\/\/[^/]+/);
   res.header("Access-Control-Allow-Origin", origin);
   res.header(
@@ -24,7 +24,9 @@ app.use((req, res, next) => {
   res.header("Access-Control-Expose-Headers", "*");
   res.header("Access-Control-Max-Age", "0");
 
+
   next();
+
 });
 
 // openssl rand -base64 64
@@ -36,22 +38,29 @@ const jwtMiddware = expressjwt({
   algorithms: ["HS256"],
   getToken: function getToken(req) {
     return req.cookies[jwtCookieKey];
-  },
+  }
 });
+
 app.use("/interface", jwtMiddware, interfaceRouter);
 
-app.get("/", (req, res) => {
+app.get("/test", (req, res) => {
   res.send("Hello World!");
 });
 
 app.get("/user", jwtMiddware, async function user(req, res) {
-  res.json(req.auth);
+  // res.json(req.auth);
+  res.json({ message: 'success', code: 0, data: { user: req.auth } });
 });
+
+app.post("/logout", function logout(req, res) {
+  res.clearCookie(jwtCookieKey);
+  res.json({ message: 'success', code: 0 });
+})
 
 app.post("/login", async function login(req, res) {
   const existUsers = [
-    { Username: "a", Password: "a" },
-    { Username: "b", Password: "b" },
+    { Username: "admin", Password: "admin" },
+    { Username: "user1", Password: "user1" },
   ];
 
   const found = existUsers.find(
@@ -65,14 +74,21 @@ app.post("/login", async function login(req, res) {
       maxAge: 30 * 24 * 60 * 60_000,
       httpOnly: true,
     });
-    res.sendStatus(200);
+    res.json({ message: 'success', code: 0, data: { token: token } });
   } else {
-    res.sendStatus(400);
+    res.sendStatus(401);
   }
 });
 
-// app.listen(port, () => {
-//     console.log(`Example app listening at http://localhost:${port}`);
-// })
+// 添加错误处理中间件
+app.use(function (err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+    // 如果是认证错误，可以返回特定的响应
+    res.status(401).send("Unauthorized: No valid token provided");
+  } else {
+    // 其他类型的错误继续传递
+    next(err);
+  }
+});
 
 module.exports = app;

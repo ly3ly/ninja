@@ -11,6 +11,7 @@ import {
 import { Layout, Menu, Button, theme, Dropdown, Breadcrumb } from 'antd';
 import logo from '../assets/logo.svg';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { Logout } from '../services/login';
 const { Header, Sider, Content } = Layout;
 const siderMenu = [
     {
@@ -84,10 +85,11 @@ const MyLayout = ({ children }) => {
         setBreadcrumbs(findDeepPath(pathname, siderMenu));
     }, [pathname]);
 
-    const handleDropDownClick = (e) => {
+    const handleDropDownClick = async (e) => {
         console.log('click', e);
         switch (e.key) {
             case "Logout":
+                await Logout();
                 navigate("/");
                 break;
             case "Profile":
