@@ -1,0 +1,19 @@
+{
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "jest --detectOpenHandles"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "express": "^4.18.2",
+    "express-jwt": "^8.4.1",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
