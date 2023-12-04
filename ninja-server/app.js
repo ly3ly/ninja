@@ -41,7 +41,7 @@ const jwtMiddware = expressjwt({
   }
 });
 
-app.use("/interface", jwtMiddware, interfaceRouter);
+app.use("/interface", interfaceRouter);
 
 app.get("/test", (req, res) => {
   res.send("Hello World!");

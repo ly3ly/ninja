@@ -1,6 +1,6 @@
 # <img src="./imgs/logo.svg" width=30 height=30/> Ninja - fasten your iteration boost
 
-(To be improved) An auxiliary tool that can automatically generate interface `contract test cases`, reducing the amount of coding for developers, improving code quality, and helping to accelerate product iterations
+ An auxiliary tool that can automatically generate interface `contract test cases`, reducing the amount of coding for developers, improving code quality, and helping to accelerate product iterations
 
 
 ## Scrum management
@@ -29,14 +29,17 @@ cd ninja-server
 npm i
 npm run dev
 ```
-
+### run the testing-api
+```
+./api-server-for-testing
+```
 
 ## Architecture
-Frontend: React.js + Antd
+Frontend: React.js + Antd + Vite
 
 Backend: Express.js
 
-Other Tools: docker, PICT
+Other Tools: PICT
 
 
 
@@ -54,8 +57,3 @@ Our team may put emphasis on `Reliability`, `Usability`, `Maintainability`, and 
 > `Maintainability`/ `Testability`: Write clear, modular, and readable code to facilitate future maintenance and modifications. Use comments and documentation to explain code logic and design decisions. Adopt practices like test-driven development (TDD) and unit testing to ensure code quality and maintainability.
 
 > `Compatibility`/ `portability`: Ensure compatibility across different platforms, operating systems, or browsers. Follow standards and specifications for seamless integration and interaction with other systems.
-
-
-## Contributors
-.
-
